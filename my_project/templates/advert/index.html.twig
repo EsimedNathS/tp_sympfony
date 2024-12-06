@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Advert index{% endblock %}
+
+{% block body %}
+    <h1>Advert index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Content</th>
+                <th>Author</th>
+                <th>Email</th>
+                <th>Price</th>
+                <th>State</th>
+                <th>Category</th>
+                <th>Pictures number</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for advert in adverts %}
+            <tr>
+                <td>{{ advert.id }}</td>
+                <td>{{ advert.title }}</td>
+                <td>{{ advert.content }}</td>
+                <td>{{ advert.author }}</td>
+                <td>{{ advert.email }}</td>
+                <td>{{ advert.price }}</td>
+                <td>
+                    {% if advert.state == 'draft' %}
+                        <div class="waiting_state">En attente de publication</div>
+                    {% elseif advert.state == 'published' %}
+                        <div class="published_state">Publiée</div>
+                    {% elseif advert.state == 'rejected' %}
+                        <div class="rejected_state">Rejetée</div>
+                    {% endif %}
+                </td>
+                <td>{{ advert.category.name }}</td>
+                <td>{{ advert.pictures|length }}</td>
+                <td>
+                    <a href="{{ path('app_advert_show', {'id': advert.id}) }}" class="btn btn-show btn-advert">Consulter</a>
+                    {% if advert.state == 'draft' %}
+                        <form action="{{ path('app_advert_publish', {'id': advert.id}) }}" method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-new btn-advert">Publier</button>
+                        </form>
+                    {% endif %}
+                    {% if advert.state in ['draft', 'published'] %}
+                        <form action="{{ path('app_advert_reject', {'id': advert.id}) }}" method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-danger btn-advert">Rejeter</button>
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="10">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        {% if previous is not null %}
+            <a href="{{ path('app_advert_index', { offset: previous }) }}">Précédent</a>
+        {% endif %}
+
+        {% if next is not null %}
+            <a href="{{ path('app_advert_index', { offset: next }) }}">Suivant</a>
+        {% endif %}
+    </div>
+
+{% endblock %}
