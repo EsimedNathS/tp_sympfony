@@ -18,7 +18,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-//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
+
 
 #[ORM\Entity(repositoryClass: AdvertRepository::class)]
 #[ApiResource(
